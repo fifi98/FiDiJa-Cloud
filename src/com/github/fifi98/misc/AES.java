@@ -1,4 +1,4 @@
-package com.github.fifi98;
+package com.github.fifi98.misc;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;

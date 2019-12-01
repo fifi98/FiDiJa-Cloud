@@ -1,15 +1,14 @@
-package com.github.fifi98;
+package com.github.fifi98.misc;
 
-import java.io.FileInputStream;
+import com.github.fifi98.Main;
+import com.github.fifi98.Sync;
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Properties;
 
 public class MySQLConnection {
 
@@ -21,22 +20,14 @@ public class MySQLConnection {
 
     private void getConnection() {
 
-        try (InputStream input = Main.class.getResourceAsStream("/resources/config.properties")) {
-            Properties prop = new Properties();
-            prop.load(input);
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                connection = DriverManager.getConnection("jdbc:mysql://"+prop.getProperty("mysql.host")+":"+prop.getProperty("mysql.port")+"/"+prop.getProperty("mysql.database"), prop.getProperty("mysql.user"), prop.getProperty("mysql.password"));
-            } catch (ClassNotFoundException e) {
-                System.out.println(e.getMessage());
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:mysql://"+ Properties.get("mysql.host")+":"+Properties.get("mysql.port")+"/"+Properties.get("mysql.database"), Properties.get("mysql.user"), Properties.get("mysql.password"));
+        } catch (ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
-
 
     }
 
@@ -66,8 +57,6 @@ public class MySQLConnection {
                 } finally {
                     if (statement1 != null) statement1.close();
                 }
-
-
             }else{
                 //This file does not exist on the server, we have to upload it
                 PreparedStatement statement1 = null;
@@ -83,7 +72,6 @@ public class MySQLConnection {
                     if (statement != null) statement.close();
                 }
             }
-
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {

@@ -1,24 +1,18 @@
 package com.github.fifi98.forms;
 
 import com.github.fifi98.Main;
-import com.github.fifi98.Sync;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
-public class Setup extends JFrame {
+public class Settings extends JFrame {
 
-    JLabel chosen_directory;
+    JTextArea chosen_directory;
 
-    public Setup()
-    {
-        setTitle("Setup");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public Settings(){
+        setTitle("Settings");
         setSize(400,300);
         setResizable(false);
         setLocationRelativeTo(null);
@@ -55,7 +49,7 @@ public class Setup extends JFrame {
                 if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
                 {
                     Main.folder_to_sync=chooser.getSelectedFile().getAbsolutePath();
-                    chosen_directory.setText(Main.folder_to_sync);
+                    chosen_directory.setText("New directory: " + Main.folder_to_sync);
                 }
 
             }
@@ -63,8 +57,14 @@ public class Setup extends JFrame {
         main.add(browse_button);
 
         //Label for showing chosen directory
-        chosen_directory = new JLabel("", SwingConstants.CENTER);
+        chosen_directory = new JTextArea("Current directory: " + Main.folder_to_sync);
+        chosen_directory.setBorder(new EmptyBorder(20, 0, 0, 0));
+        chosen_directory.setLineWrap(true);
+        chosen_directory.setWrapStyleWord(true);
+        chosen_directory.setOpaque(false);
+        chosen_directory.setEditable(false);
         chosen_directory.setForeground(Color.white);
+
         main.add(chosen_directory);
 
         //Footer panel
@@ -72,40 +72,14 @@ public class Setup extends JFrame {
         footer.setBackground(Color.darkGray);
         footer.setLayout(new FlowLayout(FlowLayout.CENTER));
 
+        //Log out button
+        JButton logout_button=new JButton("Logout");
+        logout_button.setPreferredSize(new Dimension(140,35));
+        footer.add(logout_button);
+
         //Finish button
-        JButton finish_button=new JButton("Finish setup");
-        finish_button.setPreferredSize(new Dimension(340,35));
-        finish_button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                if(chosen_directory.getText().equals("")){
-                    JOptionPane.showMessageDialog(null, "Please choose a directory to sync", "Error", JOptionPane.PLAIN_MESSAGE, null);
-                    return;
-                }
-
-                //Save to config file
-                java.util.Properties props = new java.util.Properties();
-                FileOutputStream out = null;
-                try {
-                    out = new FileOutputStream("config.properties");
-                    props.setProperty("userID", String.valueOf(Main.logged_as));
-                    props.setProperty("installed", "true");
-                    props.setProperty("folder_to_sync", Main.folder_to_sync);
-                    props.store(out, null);
-                    out.close();
-                } catch (FileNotFoundException ex) {
-                    ex.printStackTrace();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-
-                //Show main syncing form
-                new Syncing();
-                setVisible(false);
-
-            }
-        });
+        JButton finish_button=new JButton("Save");
+        finish_button.setPreferredSize(new Dimension(140,35));
         footer.add(finish_button);
 
         //Combine header, main and footer
@@ -113,5 +87,8 @@ public class Setup extends JFrame {
         add(main, BorderLayout.CENTER);
         add(footer, BorderLayout.SOUTH);
         footer.setBorder(new EmptyBorder(0, 0, 20, 0));
+
+        setVisible(true);
     }
+
 }

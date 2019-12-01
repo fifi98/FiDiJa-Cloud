@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="FiDiJa Cloud:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/FiDiJa_Cloud_jar</output-path>
+    <root id="archive" name="FiDiJa Cloud.jar">
+      <element id="module-output" name="FiDiJa Cloud" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/mysql-connector-java-5.1.48/mysql-connector-java-5.1.48.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/commons-net-3.6/commons-net-3.6.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

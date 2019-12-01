@@ -1,9 +1,8 @@
 package com.github.fifi98.forms;
 
-import com.github.fifi98.AES;
+import com.github.fifi98.misc.AES;
 import com.github.fifi98.Main;
-import com.github.fifi98.MySQLConnection;
-
+import com.github.fifi98.misc.MySQLConnection;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;

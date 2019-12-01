@@ -1,30 +1,25 @@
-package com.github.fifi98;
+package com.github.fifi98.forms;
+
+import com.github.fifi98.Main;
+import com.github.fifi98.Sync;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
-public class Test extends JFrame {
-    JPanel panel;
-    JLabel label;
+public class Syncing extends JFrame {
 
-    // constructor
-    public Test()
-    {
-        setTitle("Login");
+    public Syncing(){
+
+        setTitle("FiDiJa Cloud");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400,450);
+        setSize(400,350);
         setResizable(false);
         setLocationRelativeTo(null);
-
-
-
-
-
-
+        setVisible(true);
+        getContentPane().setBackground(Color.darkGray);
 
         //Header for the logo
         JPanel header = new JPanel();
@@ -43,42 +38,28 @@ public class Test extends JFrame {
         login_form.setLayout(new GridLayout(0, 1));
         login_form.setBorder(new EmptyBorder(-50, 0, 0, 0));
 
-
-        //Email label
-        JLabel email_label = new JLabel(" Email");
-        email_label.setBorder(new EmptyBorder(0, -1, -22, 0));
-        email_label.setForeground(Color.white);
-        login_form.add(email_label);
-
-        //Email input
-        JTextField email_input = new JTextField(8);
-        login_form.add(email_input);
-
-        //Password label
-        JLabel password_label = new JLabel(" Password");
-        password_label.setBorder(new EmptyBorder(0, -1, -22, 0));
-        password_label.setForeground(Color.white);
-        login_form.add(password_label);
-
-        //Password input
-        JPasswordField password_input = new JPasswordField(8);
-        login_form.add(password_input);
+        //Syncing label
+        Main.status_label = new JLabel("Waiting for changes in sync directory . . .", SwingConstants.CENTER);
+        Main.status_label.setBorder(new EmptyBorder(0, -1, -22, 0));
+        Main.status_label.setForeground(Color.white);
+        login_form.add(Main.status_label);
 
         //Footer for login button
         JPanel footer = new JPanel();
         footer.setLayout(new GridLayout(0, 1));
         footer.setBackground(Color.darkGray);
 
-        //Login button
-        JButton login_button=new JButton("Login");
-        login_button.setPreferredSize(new Dimension(200,40));
-        login_button.addActionListener(new ActionListener() {
+        //Settings button
+        JButton settings_button=new JButton("Settings");
+        settings_button.setPreferredSize(new Dimension(200,40));
+        settings_button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                new Settings();
 
             }
         });
-        footer.add(login_button);
+        footer.add(settings_button);
 
 
         //Combine header, login form and footer
@@ -87,6 +68,11 @@ public class Test extends JFrame {
         add(login_form, BorderLayout.CENTER);
         footer.setBorder(new EmptyBorder(10, 60, 30, 60));
         add(footer, BorderLayout.SOUTH);
+
+        setVisible(true);
+
+        //Start syncing
+        new Sync(Main.folder_to_sync);
 
     }
 

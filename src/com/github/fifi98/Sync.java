@@ -1,25 +1,19 @@
 package com.github.fifi98;
 
+import com.github.fifi98.misc.Properties;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 public class Sync {
 
     public Sync(String folder_path){
-
-
         new Thread(new Runnable() {
             public void run() {
 
@@ -31,9 +25,9 @@ public class Sync {
                     } catch (NoSuchAlgorithmException e) {
                         e.printStackTrace();
                     }
-                    //Svakih 5 sec provjeravaj
+                    //Do the check every 2 seconds
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -41,8 +35,6 @@ public class Sync {
 
             }
         }).start();
-
-
     }
 
     //Nabavi sve fileove u odabranom folderu za syncanje
@@ -62,24 +54,20 @@ public class Sync {
                     //Ako hashevi nisu isti, ili file ne postoji na serveru, uploadaj ga
                     if(!Main.conn.file_uptodate(file_path,file_hash)){
 
-                        FTPClient client = new FTPClient();
+                        Main.status_label.setText("Syncing . . .");
 
+                        FTPClient client = new FTPClient();
                         FileInputStream fis = null;
 
                         try {
 
-                            InputStream input = Main.class.getResourceAsStream("/resources/config.properties");
-                            Properties prop = new Properties();
-                            prop.load(input);
-
-                            client.connect(prop.getProperty("ftp.host"));
-                            client.login(prop.getProperty("ftp.user"), prop.getProperty("ftp.password"));
+                            //Connect to FTP
+                            client.connect(Properties.get("ftp.host"));
+                            client.login(Properties.get("ftp.user"), Properties.get("ftp.password"));
                             client.setFileType(FTP.BINARY_FILE_TYPE, FTP.BINARY_FILE_TYPE);
                             client.enterLocalPassiveMode();
 
-                            //
                             fis = new FileInputStream(file_path);
-
                             //Get filename
                             String file_name=file_path.replace(Main.folder_to_sync + "/", "");
                             //Check if the file is in a subdirectory
@@ -96,54 +84,42 @@ public class Sync {
                                 file_name=subfolders.get(subfolders.size()-1);
                             }
 
-
+                            //Get into user's directory
+                            client.changeWorkingDirectory(String.valueOf(Main.logged_as));
+                            //Upload the file
                             client.storeFile(file_name, fis);
                             client.logout();
-                            //Store file hash in db
 
-
+                            Main.status_label.setText("Waiting for changes in sync directory . . .");
                             System.out.println("Uploaded: "+ file.getAbsolutePath());
 
                         } catch (IOException e) {
                             e.printStackTrace();
                         } finally {
-                            try {
-                                if (fis != null) {
-                                    fis.close();
-                                }
-                                client.disconnect();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            if (fis != null) fis.close();
+                            client.disconnect();
                         }
-
                     }
-
-
-
-                } else if (file.isDirectory()) {
+                } else if (file.isDirectory()){
+                    //If it is a directory, look for files inside
                     getFiles(file.getAbsolutePath());
                 }
             }
-
     }
 
-    //Nabavi SHA-256 hash filea
+    //Get file SHA-256 hash
     public static String getHash(String file_path) throws IOException, NoSuchAlgorithmException {
+
         MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
         FileInputStream fis = new FileInputStream(file_path);
 
         byte[] data = new byte[1024];
         int read = 0;
-        while ((read = fis.read(data)) != -1) {
-            sha256.update(data, 0, read);
-        };
-        byte[] hashBytes = sha256.digest();
+        while ((read = fis.read(data)) != -1) sha256.update(data, 0, read);
 
+        byte[] hashBytes = sha256.digest();
         StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < hashBytes.length; i++) {
-            sb.append(Integer.toString((hashBytes[i] & 0xff) + 0x100, 16).substring(1));
-        }
+        for (int i = 0; i < hashBytes.length; i++) sb.append(Integer.toString((hashBytes[i] & 0xff) + 0x100, 16).substring(1));
 
         return sb.toString();
     }
