@@ -5,6 +5,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
 public class AES {
+
     public static String encrypt(String input, String key) {
         byte[] crypted = null;
         try {

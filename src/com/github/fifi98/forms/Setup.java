@@ -1,7 +1,6 @@
 package com.github.fifi98.forms;
 
 import com.github.fifi98.Main;
-import com.github.fifi98.Sync;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -47,7 +46,7 @@ public class Setup extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                JFileChooser chooser = new JFileChooser(); //Downloads Directory as default
+                JFileChooser chooser = new JFileChooser();
                 chooser.setDialogTitle("Select sync folder");
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 chooser.setAcceptAllFileFilterUsed(false);
@@ -101,7 +100,7 @@ public class Setup extends JFrame {
                 }
 
                 //Show main syncing form
-                new Syncing();
+                Main.syncing=new Syncing();
                 setVisible(false);
 
             }

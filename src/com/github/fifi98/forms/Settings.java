@@ -1,11 +1,16 @@
 package com.github.fifi98.forms;
 
 import com.github.fifi98.Main;
+import com.github.fifi98.Sync;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class Settings extends JFrame {
 
@@ -75,12 +80,37 @@ public class Settings extends JFrame {
         //Log out button
         JButton logout_button=new JButton("Logout");
         logout_button.setPreferredSize(new Dimension(140,35));
+        logout_button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                Main.syncing.setVisible(false);
+                new Login();
+                //Save to config file
+                java.util.Properties props = new java.util.Properties();
+                FileOutputStream out = null;
+                try {
+                    out = new FileOutputStream("config.properties");
+                    props.setProperty("userID", "0");
+                    props.setProperty("installed", "false");
+                    props.setProperty("folder_to_sync", "");
+                    props.store(out, null);
+                    out.close();
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                //Stop syncing
+                Sync.running=false;
+            }
+        });
         footer.add(logout_button);
 
-        //Finish button
-        JButton finish_button=new JButton("Save");
-        finish_button.setPreferredSize(new Dimension(140,35));
-        footer.add(finish_button);
+        //Save button
+        JButton save_button=new JButton("Save");
+        save_button.setPreferredSize(new Dimension(140,35));
+        footer.add(save_button);
 
         //Combine header, main and footer
         add(header, BorderLayout.NORTH);

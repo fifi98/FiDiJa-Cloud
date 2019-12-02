@@ -61,7 +61,6 @@ public class Syncing extends JFrame {
         });
         footer.add(settings_button);
 
-
         //Combine header, login form and footer
         add(header, BorderLayout.NORTH);
         login_form.setBorder(new EmptyBorder(0, 60, 30, 60));
@@ -73,7 +72,5 @@ public class Syncing extends JFrame {
 
         //Start syncing
         new Sync(Main.folder_to_sync);
-
     }
-
 }

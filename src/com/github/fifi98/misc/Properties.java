@@ -8,7 +8,6 @@ public class Properties {
 
     public static String get(String key){
 
-
         java.util.Properties prop = null;
         try (InputStream input = Main.class.getResourceAsStream("/resources/config.properties")) {
             prop = new java.util.Properties();
@@ -36,41 +35,6 @@ public class Properties {
         } catch (IOException ex) {
             // I/O error
         }
-
-        /*
-        java.util.Properties prop = null;
-        try (InputStream input = Main.class.getResourceAsStream("/resources/config.properties")) {
-            prop = new java.util.Properties();
-            prop.load(input);
-            prop.setProperty(property, value);
-
-            try {
-                prop.store(new FileOutputStream("src/resources/config.properties"), null);
-            } catch (IOException ex) {
-                System.out.println(ex);
-            }
-            input.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-         */
-
-        /*
-        FileOutputStream out = null;
-        try {
-            java.util.Properties props = new java.util.Properties();
-            out = new FileOutputStream("src/resources/config.properties");
-            props.setProperty(property, value);
-            props.store(out, null);
-            out.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-*/
 
     }
 

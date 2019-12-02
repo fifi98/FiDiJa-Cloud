@@ -15,6 +15,7 @@ public class Main {
     public static int logged_as=0;
     public static String folder_to_sync=null;
     public static JLabel status_label;
+    public static Syncing syncing;
 
     public static void main(String[] args) throws IOException {
 
@@ -36,11 +37,10 @@ public class Main {
             logged_as=Integer.parseInt(props.getProperty("userID"));
             folder_to_sync=props.getProperty("folder_to_sync");
             conn=new MySQLConnection();
-            new Syncing();
+            syncing=new Syncing();
         }else{
             new Login();
         }
         in.close();
-
     }
 }

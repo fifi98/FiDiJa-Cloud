@@ -13,11 +13,13 @@ import java.util.List;
 
 public class Sync {
 
+    public static boolean running=true;
+
     public Sync(String folder_path){
         new Thread(new Runnable() {
             public void run() {
-
-                while(true){
+                running=true;
+                while(running){
                     try {
                         getFiles(folder_path);
                     } catch (IOException e) {
@@ -32,7 +34,7 @@ public class Sync {
                         e.printStackTrace();
                     }
                 }
-
+                System.out.println("Sync stop");
             }
         }).start();
     }
@@ -42,7 +44,7 @@ public class Sync {
 
         File directory = new File(folder_path);
 
-        // Get all files from a directory.
+        //Get all files from a directory.
         File[] fList = directory.listFiles();
         if(fList != null)
             for (File file : fList) {
@@ -60,7 +62,6 @@ public class Sync {
                         FileInputStream fis = null;
 
                         try {
-
                             //Connect to FTP
                             client.connect(Properties.get("ftp.host"));
                             client.login(Properties.get("ftp.user"), Properties.get("ftp.password"));

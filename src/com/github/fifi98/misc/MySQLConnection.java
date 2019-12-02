@@ -85,8 +85,8 @@ public class MySQLConnection {
     }
 
     public boolean compare_password(String user, String password){
-        PreparedStatement statement = null;
 
+        PreparedStatement statement = null;
         try {
             String sql = "SELECT * FROM users WHERE user_address = ?";
             statement = connection.prepareStatement(sql);
