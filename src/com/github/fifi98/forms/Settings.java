@@ -15,6 +15,7 @@ import java.io.IOException;
 public class Settings extends JFrame {
 
     JTextArea chosen_directory;
+    String new_directory=null;
 
     public Settings(){
         setTitle("Settings");
@@ -53,8 +54,8 @@ public class Settings extends JFrame {
 
                 if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
                 {
-                    Main.folder_to_sync=chooser.getSelectedFile().getAbsolutePath();
-                    chosen_directory.setText("New directory: " + Main.folder_to_sync);
+                    new_directory=chooser.getSelectedFile().getAbsolutePath();
+                    chosen_directory.setText("New directory: " + new_directory);
                 }
 
             }
@@ -110,6 +111,33 @@ public class Settings extends JFrame {
         //Save button
         JButton save_button=new JButton("Save");
         save_button.setPreferredSize(new Dimension(140,35));
+        save_button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Stop sync
+                Sync.running=false;
+                //Save the new sync directory
+                Main.folder_to_sync=new_directory;
+                java.util.Properties props = new java.util.Properties();
+                FileOutputStream out = null;
+                try {
+                    out = new FileOutputStream("config.properties");
+                    props.setProperty("folder_to_sync", Main.folder_to_sync);
+                    props.store(out, null);
+                    out.close();
+                } catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                //Start sync
+                new Sync(Main.folder_to_sync);
+                //
+                setVisible(false);
+
+            }
+        });
+
         footer.add(save_button);
 
         //Combine header, main and footer

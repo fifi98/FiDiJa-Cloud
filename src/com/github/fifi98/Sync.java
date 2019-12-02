@@ -67,6 +67,8 @@ public class Sync {
                             client.login(Properties.get("ftp.user"), Properties.get("ftp.password"));
                             client.setFileType(FTP.BINARY_FILE_TYPE, FTP.BINARY_FILE_TYPE);
                             client.enterLocalPassiveMode();
+                            //Go into user's directory
+                            client.changeWorkingDirectory(String.valueOf(Main.logged_as));
 
                             fis = new FileInputStream(file_path);
                             //Get filename
@@ -85,8 +87,6 @@ public class Sync {
                                 file_name=subfolders.get(subfolders.size()-1);
                             }
 
-                            //Get into user's directory
-                            client.changeWorkingDirectory(String.valueOf(Main.logged_as));
                             //Upload the file
                             client.storeFile(file_name, fis);
                             client.logout();
