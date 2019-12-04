@@ -31,7 +31,7 @@ public class MySQLConnection {
 
     }
 
-    public boolean file_uptodate(String file_path, String hash) throws IOException, NoSuchAlgorithmException {
+    public boolean file_uptodate(String file_path, String hash, String file_name) throws IOException, NoSuchAlgorithmException {
         PreparedStatement statement = null;
 
         try {
@@ -48,9 +48,10 @@ public class MySQLConnection {
                 //This file exists, but we have to upload the new version
                 PreparedStatement statement1 = null;
                 try {
-                    statement1 = connection.prepareStatement("UPDATE files SET file_hash=? WHERE file_name=?");
+                    statement1 = connection.prepareStatement("UPDATE files SET file_hash=?, file_location=? WHERE file_name=?");
                     statement1.setString(1, Sync.getHash(file_path));
-                    statement1.setString(2, file_path);
+                    statement1.setString(2, file_name);
+                    statement1.setString(3, file_path);
                     statement1.execute();
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
@@ -61,10 +62,11 @@ public class MySQLConnection {
                 //This file does not exist on the server, we have to upload it
                 PreparedStatement statement1 = null;
                 try {
-                    statement1 = connection.prepareStatement("INSERT INTO files(file_name, file_hash, user_id) VALUES(?,?,?)");
+                    statement1 = connection.prepareStatement("INSERT INTO files(file_name, file_hash, user_id, file_location) VALUES(?,?,?,?)");
                     statement1.setString(1, file_path);
                     statement1.setString(2, Sync.getHash(file_path));
                     statement1.setInt(3, Main.logged_as);
+                    statement1.setString(4, file_name);
                     statement1.execute();
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());

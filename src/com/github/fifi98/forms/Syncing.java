@@ -3,11 +3,14 @@ package com.github.fifi98.forms;
 import com.github.fifi98.Main;
 import com.github.fifi98.Sync;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class Syncing extends JFrame {
 
@@ -27,7 +30,16 @@ public class Syncing extends JFrame {
 
         //Logo
         JLabel logo = new JLabel();
-        ImageIcon imageIcon = new ImageIcon(new ImageIcon("/Users/filip/IdeaProjects/FiDiJa Cloud/icon.png").getImage().getScaledInstance(148, 148, Image.SCALE_SMOOTH));
+
+        InputStream stream = getClass().getResourceAsStream("/resources/icon.png");
+
+        ImageIcon imageIcon = null;
+        try {
+            imageIcon = new ImageIcon(new ImageIcon(ImageIO.read(stream)).getImage().getScaledInstance(148, 148, Image.SCALE_SMOOTH));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         logo.setIcon(imageIcon);
         logo.setBorder(new EmptyBorder(0, 0, -0, 0));
         header.add(logo);

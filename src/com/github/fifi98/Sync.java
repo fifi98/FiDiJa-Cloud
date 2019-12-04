@@ -53,8 +53,11 @@ public class Sync {
                     String file_path=file.getAbsolutePath();
                     String file_hash=getHash(file.getAbsolutePath());
 
+                    //Get filename
+                    String file_name=file_path.replace(Main.folder_to_sync + "/", "");
+
                     //Ako hashevi nisu isti, ili file ne postoji na serveru, uploadaj ga
-                    if(!Main.conn.file_uptodate(file_path,file_hash)){
+                    if(!Main.conn.file_uptodate(file_path,file_hash, file_name)){
 
                         Main.status_label.setText("Syncing . . .");
 
@@ -71,8 +74,6 @@ public class Sync {
                             client.changeWorkingDirectory(String.valueOf(Main.logged_as));
 
                             fis = new FileInputStream(file_path);
-                            //Get filename
-                            String file_name=file_path.replace(Main.folder_to_sync + "/", "");
                             //Check if the file is in a subdirectory
                             List<String> subfolders = Arrays.asList(file_name.split("/"));
                             if(subfolders.size()>0){
