@@ -47,13 +47,12 @@ public class Settings extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                JFileChooser chooser = new JFileChooser(); //Downloads Directory as default
+                JFileChooser chooser = new JFileChooser();
                 chooser.setDialogTitle("Select sync folder");
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 chooser.setAcceptAllFileFilterUsed(false);
 
-                if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
-                {
+                if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
                     new_directory=chooser.getSelectedFile().getAbsolutePath();
                     chosen_directory.setText("New directory: " + new_directory);
                 }
@@ -132,7 +131,6 @@ public class Settings extends JFrame {
                 }
                 //Start sync
                 new Sync(Main.folder_to_sync);
-                //
                 setVisible(false);
 
             }

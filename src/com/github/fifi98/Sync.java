@@ -39,7 +39,7 @@ public class Sync {
         }).start();
     }
 
-    //Nabavi sve fileove u odabranom folderu za syncanje
+    //Get all files in the selected sync folder
     void getFiles(String folder_path) throws IOException, NoSuchAlgorithmException {
 
         File directory = new File(folder_path);
@@ -56,7 +56,7 @@ public class Sync {
                     //Get filename
                     String file_name=file_path.replace(Main.folder_to_sync + "/", "");
 
-                    //Ako hashevi nisu isti, ili file ne postoji na serveru, uploadaj ga
+                    //Upload file if hashes are not identical or if the file does not exist on the server
                     if(!Main.conn.file_uptodate(file_path,file_hash, file_name)){
 
                         Main.status_label.setText("Syncing . . .");
@@ -70,6 +70,7 @@ public class Sync {
                             client.login(Properties.get("ftp.user"), Properties.get("ftp.password"));
                             client.setFileType(FTP.BINARY_FILE_TYPE, FTP.BINARY_FILE_TYPE);
                             client.enterLocalPassiveMode();
+
                             //Go into user's directory
                             client.changeWorkingDirectory(String.valueOf(Main.logged_as));
 

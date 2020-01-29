@@ -32,7 +32,6 @@ public class Syncing extends JFrame {
         JLabel logo = new JLabel();
 
         InputStream stream = getClass().getResourceAsStream("/resources/icon.png");
-
         ImageIcon imageIcon = null;
         try {
             imageIcon = new ImageIcon(new ImageIcon(ImageIO.read(stream)).getImage().getScaledInstance(148, 148, Image.SCALE_SMOOTH));

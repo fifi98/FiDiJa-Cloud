@@ -12,7 +12,6 @@ public class Properties {
         try (InputStream input = Main.class.getResourceAsStream("/resources/config.properties")) {
             prop = new java.util.Properties();
             prop.load(input);
-            input.close();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -20,7 +19,7 @@ public class Properties {
 
     }
 
-    public static void set(String key, String value){
+    public static void set(String key, String value) throws IOException {
 
         File configFile = new File("config.properties");
 
@@ -31,9 +30,7 @@ public class Properties {
             props.store(writer, "host settings");
             writer.close();
         } catch (FileNotFoundException ex) {
-            // file does not exist
-        } catch (IOException ex) {
-            // I/O error
+            ex.printStackTrace();
         }
 
     }
